@@ -50,6 +50,29 @@ namespace SistemaWebCliente.Controllers
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.BaseAddress = new Uri("https://localhost:7069/api/NegocioApi/");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(cliente),System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await httpClient.PostAsync("AddCliente", content);
+
+                mensaje = await response.Content.ReadAsStringAsync();
+            }
+            ViewBag.mensaje = mensaje;
+            return View(cliente);
+        }
+
+        // actualiza cliente
+        public async Task<IActionResult> Edit()
+        {
+            return View(await Task.Run(() => new ClienteModel()));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ClienteModel cliente)
+        {
+            string mensaje = "";
+
+            using (var httpClient = new HttpClient())
+            {
                 httpClient.BaseAddress =
                     new Uri("https://localhost:7069/api/NegocioApi/");
 
@@ -58,12 +81,33 @@ namespace SistemaWebCliente.Controllers
                     System.Text.Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await
-                    httpClient.PostAsync("AddCliente", content);
+                    httpClient.PostAsync("UpdateCliente", content);
 
                 mensaje = await response.Content.ReadAsStringAsync();
             }
             ViewBag.mensaje = mensaje;
             return View(cliente);
         }
-    }
+
+        //eliminar cliente
+
+
+            [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            string mensaje = "";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress =
+                    new Uri("https://localhost:7069/api/NegocioApi/");
+
+                HttpResponseMessage response = await
+                    httpClient.DeleteAsync($"EliminarCliente?id={id}");
+
+                mensaje = await response.Content.ReadAsStringAsync();
+            }
+            ViewBag.mensaje = mensaje;
+            return RedirectToAction("");
+        }
 }
