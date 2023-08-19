@@ -60,10 +60,30 @@ namespace SistemaWebCliente.Controllers
             return View(cliente);
         }
 
-        // actualiza cliente
-        public async Task<IActionResult> Edit()
+        public async Task<ClienteModel> Buscar(int id)
         {
-            return View(await Task.Run(() => new ClienteModel()));
+            ClienteModel cliente = new ClienteModel();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress =
+                    new Uri("https://localhost:7069/api/NegocioApi/");
+                HttpResponseMessage response = await
+                    httpClient.GetAsync("GetClientes/" + id);
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                cliente = JsonConvert.DeserializeObject<ClienteModel>(apiResponse);
+
+
+            }
+            return cliente;
+        }
+
+
+
+
+        // actualiza cliente
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View(await Task.Run(() => Buscar(id)));
         }
 
         [HttpPost]
