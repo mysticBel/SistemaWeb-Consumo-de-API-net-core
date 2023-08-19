@@ -51,7 +51,7 @@ namespace SistemaWebCliente.Controllers
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri("https://localhost:7069/api/NegocioApi/");
-                StringContent content = new StringContent(JsonConvert.SerializeObject(cliente),System.Text.Encoding.UTF8, "application/json");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(cliente), System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await httpClient.PostAsync("AddCliente", content);
 
                 mensaje = await response.Content.ReadAsStringAsync();
@@ -92,7 +92,7 @@ namespace SistemaWebCliente.Controllers
         //eliminar cliente
 
 
-            [HttpDelete]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             string mensaje = "";
@@ -110,4 +110,5 @@ namespace SistemaWebCliente.Controllers
             ViewBag.mensaje = mensaje;
             return RedirectToAction("");
         }
+    }
 }
