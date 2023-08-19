@@ -32,11 +32,6 @@ namespace SistemaWebCliente.Controllers
             return View(clienteList);
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         // Agregar nuevo cliente-vista
         public async Task<IActionResult> Create()
         {
@@ -93,15 +88,11 @@ namespace SistemaWebCliente.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress =
-                    new Uri("https://localhost:7069/api/NegocioApi/");
+                httpClient.BaseAddress = new Uri("https://localhost:7069/api/NegocioApi/");
 
-                StringContent content = new StringContent(
-                    JsonConvert.SerializeObject(cliente),
-                    System.Text.Encoding.UTF8, "application/json");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(cliente), System.Text.Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await
-                    httpClient.PostAsync("UpdateCliente", content);
+                HttpResponseMessage response = await httpClient.PutAsync("UpdateCliente", content);
 
                 mensaje = await response.Content.ReadAsStringAsync();
             }
@@ -112,7 +103,6 @@ namespace SistemaWebCliente.Controllers
         //eliminar cliente
 
 
-        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             string mensaje = "";
